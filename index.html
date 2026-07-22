@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atlas Insights: your charts, every morning</title>
+<meta name="description" content="Stop rebuilding the same stock charts every morning. Atlas Insights assembles your daily chart briefing before you wake up. Same charts, same format, zero setup.">
+<meta property="og:title" content="Atlas Insights: your charts, every morning">
+<meta property="og:description" content="A morning briefing of the stock charts you already care about, assembled before you wake up. Build it once, read it in 5 minutes every day.">
+<meta property="og:url" content="https://atlasinsightsapp.com">
+<meta property="og:image" content="https://atlasinsightsapp.com/img/01-daily-briefing.png">
+<style>
+  :root {
+    --accent: #3B5BDB;
+    --accent-soft: #f2f4fb;
+    --text: #1a1a1a;
+    --muted: #666;
+    --bg: #fff;
+    --card: #f7f8fc;
+    --border: #e6e8f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --accent: #7a94ff;
+      --accent-soft: #1c2030;
+      --text: #eee;
+      --muted: #9aa;
+      --bg: #111;
+      --card: #191c26;
+      --border: #262a38;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text); background: var(--bg); line-height: 1.6;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  a { color: var(--accent); }
+
+  /* Hero */
+  header { padding: 56px 0 24px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700;
+           font-size: 18px; letter-spacing: -0.2px; }
+  .brand .dot { width: 26px; height: 26px; border-radius: 7px;
+                background: var(--accent); display: inline-block; }
+  .hero { display: flex; gap: 48px; align-items: center; padding: 40px 0 64px;
+          flex-wrap: wrap; }
+  .hero-copy { flex: 1 1 380px; }
+  .hero h1 { font-size: 42px; line-height: 1.15; letter-spacing: -0.8px;
+             margin-bottom: 16px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p.lead { font-size: 19px; color: var(--muted); margin-bottom: 28px;
+                 max-width: 44ch; }
+  .hero-shot { flex: 0 1 300px; text-align: center; }
+  .hero-shot img { max-width: 100%; width: 300px; border-radius: 32px;
+                   box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
+
+  /* Waitlist form */
+  .capture { display: flex; gap: 10px; flex-wrap: wrap; max-width: 440px; }
+  .capture input[type=email] {
+    flex: 1 1 220px; font-size: 16px; padding: 13px 16px;
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--card); color: var(--text); min-width: 0;
+  }
+  .capture button {
+    font-size: 16px; font-weight: 600; padding: 13px 22px; border: 0;
+    border-radius: 12px; background: var(--accent); color: #fff; cursor: pointer;
+  }
+  .capture-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+  /* App Store badge: swap in at launch (see comment in the hero) */
+  .store-badge { display: none; }
+
+  /* Sections */
+  section { padding: 56px 0; border-top: 1px solid var(--border); }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 13px;
+            text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px; }
+  section h2 { font-size: 30px; letter-spacing: -0.5px; margin-bottom: 12px; }
+  section p.sub { color: var(--muted); font-size: 17px; max-width: 56ch; }
+  .feature { display: flex; gap: 48px; align-items: center; flex-wrap: wrap;
+             margin-top: 8px; }
+  .feature.rev { flex-direction: row-reverse; }
+  .feature .copy { flex: 1 1 360px; }
+  .feature .shot { flex: 0 1 260px; text-align: center; }
+  .feature .shot img { max-width: 100%; width: 260px; border-radius: 28px;
+                       box-shadow: 0 16px 44px rgba(0,0,0,0.14); }
+  .feature ul { margin: 16px 0 0 0; padding: 0; list-style: none; }
+  .feature li { padding: 7px 0 7px 30px; position: relative; }
+  .feature li::before { content: "✓"; position: absolute; left: 0; top: 7px;
+                        color: var(--accent); font-weight: 700; }
+
+  /* Pricing */
+  .pricing-box { background: var(--accent-soft); border-radius: 18px;
+                 padding: 32px; margin-top: 24px; max-width: 560px; }
+  .pricing-box .price { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+  .pricing-box .per { font-size: 16px; color: var(--muted); font-weight: 400; }
+  .pricing-box p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+
+  footer { border-top: 1px solid var(--border); padding: 36px 0 56px;
+           font-size: 14px; color: var(--muted); }
+  footer .links { margin-bottom: 12px; }
+  footer .links a { margin-right: 18px; }
+  .disclaimer { font-size: 13px; }
+
+  @media (max-width: 700px) {
+    .hero { padding: 24px 0 48px; }
+    .hero h1 { font-size: 32px; }
+    section h2 { font-size: 25px; }
+    .feature, .feature.rev { flex-direction: column; }
+    .feature .shot { order: 2; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="dot"></span> Atlas Insights</div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-copy">
+      <h1>Stop rebuilding the same charts <em>every morning</em>.</h1>
+      <p class="lead">Atlas Insights turns 20 minutes of googling tickers and
+      fiddling with chart settings into a 5-minute ritual: your charts,
+      assembled before you wake up. Same format, every day, zero setup.</p>
+
+      <!-- WAITLIST FORM: replace action with your Kit (ConvertKit) form endpoint.
+           At launch: delete this form, unhide .store-badge below, and set its href
+           to the App Store link. -->
+      <form class="capture" action="#" method="post">
+        <input type="email" name="email_address" placeholder="you@email.com"
+               aria-label="Email address" required>
+        <button type="submit">Get launch access</button>
+      </form>
+      <p class="capture-note">Launching soon on the App Store. One email when
+      it's live, nothing else.</p>
+
+      <a class="store-badge" href="#">
+        <img src="img/app-store-badge.svg" alt="Download on the App Store" width="160">
+      </a>
+    </div>
+    <div class="hero-shot">
+      <img src="img/01-daily-briefing.png"
+           alt="Atlas Insights daily briefing: a stack of styled stock charts">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section>
+    <p class="kicker">Build it once</p>
+    <h2>Your lineup, your format.</h2>
+    <div class="feature rev">
+      <div class="copy">
+        <p class="sub">Search any stock, index, FX pair, treasury yield, or
+        commodity. Pick the timeframe, style, and theme once and never set it
+        up again.</p>
+        <ul>
+          <li>Composable timeframes: 3 days, 2 weeks, YTD, or 4 years</li>
+          <li>Line or candlestick, four chart themes including dark Midnight cards</li>
+          <li>Moving average and metric overlays on any chart</li>
+        </ul>
+      </div>
+      <div class="shot">
+        <img src="img/03-config-sheet.png"
+             alt="Chart configuration sheet with live preview">
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Read it every morning</p>
+    <h2>Assembled before you wake up.</h2>
+    <div class="feature">
+      <div class="copy">
+        <p class="sub">Your briefing refreshes on your schedule. Open the app
+        and it's already there: same charts, same order, every day. Slide
+        across any chart to scrub prices and dates.</p>
+        <ul>
+          <li>Daily and Weekly briefings, refreshed on your schedule</li>
+          <li>Fundamentals, charted: EPS, P/E, PEG, P/B, P/FCF, dividend yield</li>
+          <li>A quiet notification when your brief is ready</li>
+        </ul>
+      </div>
+      <div class="shot">
+        <img src="img/02-pro-metric-charts.png"
+             alt="Fundamental metric charts with overlays">
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Pricing</p>
+    <h2>One membership. Everything included.</h2>
+    <div class="pricing-box">
+      <div class="price">$29.99<span class="per">/year after a 7-day free trial</span></div>
+      <p>That's about $0.58 a week, and your first full trading week of
+      mornings is free. Prefer not to commit? $2.99/week, cancel anytime.</p>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <footer>
+    <div class="links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="support.html">Support</a>
+      <a href="mailto:support@atlasinsightsapp.com">Contact</a>
+    </div>
+    <p class="disclaimer">Atlas Insights is for information only and is not
+    investment advice. © 2026 Atlas Insights · atlasinsightsapp.com</p>
+  </footer>
+</div>
+
+</body>
+</html>
